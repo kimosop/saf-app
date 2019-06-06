@@ -1,0 +1,1 @@
+web: ./build/install/saf-app/bin/saf-app
