@@ -9,7 +9,7 @@ archivesBaseName = "saf-app"
 
 sourceCompatibility = 1.8
 applicationName = "saf-app"
-mainClassName ='Interface'
+mainClassName ='App'
 
 repositories {
     mavenCentral()
