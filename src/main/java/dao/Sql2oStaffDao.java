@@ -45,7 +45,7 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
 
     @Override
     public void update(int id, String newDescription, int newDepartmentId){
-        String sql = "UPDATE tasks SET (description, departmentId) = (:description, :departmentId) WHERE id=:id";   //raw sql
+        String sql = "UPDATE staff SET (description, departmentId) = (:description, :departmentId) WHERE id=:id";   //raw sql
         try(Connection con = sql2o.open()){
             con.createQuery(sql)
                     .addParameter("description", newDescription)
