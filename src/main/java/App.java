@@ -1,16 +1,19 @@
+
 import static spark.Spark.*;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dao.DB;
 import dao.DepartmentsDao;
 import dao.Sql2oStaffDao;
 import dao.Sql2oDepartmentsDao;
 import jdk.vm.ci.code.site.Site;
-import models.db;
-import models.Staff;
+
 import models.Departments;
+import models.Staff;
+import com.google.gson.Gson;
 
 import org.sql2o.Sql2o;
 import spark.ModelAndView;
@@ -30,244 +33,165 @@ public class App{
 
 
         staticFileLocation("/public");
-//        Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/site_maintenance", null, null);
-        Sql2o sql2o = db.sql2o;
-        Sql2oDao StaffDao = new Sql2oStaffDao(sql2o);
-        Sql2oDepartmentsDao siteDao = new Sql2oDepartmentsDao(sql2o);
-
-        get("/", (request, response) -> {
-                    Map<String, Object> model = new HashMap<>();
-                    return new ModelAndView(model, "index.hbs");
-                }, new HandlebarsTemplateEngine()
-        );
-
-        //get: delete all
-        get("//delete", (req, res) -> {
+      // Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/saf-app",username:, null);
+        //Sql2o sql2o = DB.sql2o;
+        Sql2oStaffDao StaffDao = new Sql2oStaffDao(DB.sql2o);
+        Sql2oDepartmentsDao DepartmentsDao = new Sql2oDepartmentsDao(DB.sql2o);
+        Gson gson = new Gson();
+        //get: show all tasks in all categories and show all categories
+        get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            StaffDao.clearAll(); //change
-            res.redirect("/");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-
-        //get: delete an individual engineer
-        get("//:id/delete", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            int idOfStaffToDelete = Integer.parseInt(req.params("id"));
-            StaffDao.deleteById(idOfStaffToDelete); //change
-            res.redirect("/");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-
-        //get: show all
-        get("/index", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            List<Staff> all = StaffDao.getAll();
-            model.put("", all);
+            List<Departments> allDepartments = DepartmentsDao.getAll();
+            model.put("departments", allDepartments);
+            List<Staff> tasks = StaffDao.getAll();
+            model.put("tasks", tasks);
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-
-        //get: show new engineer form
-        get("//new", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            List<Staff>  = StaffDao.getAll();
-            return new ModelAndView(model, "staff-form.hbs");
-        }, new HandlebarsTemplateEngine());
-
-
-        //engineer: process new engineer form
-        post("/", (req, res) -> { //URL to make new task on POST route
-            Map<String, Object> model = new HashMap<>();
-            String name = req.queryParams("name");
-            String department = req.queryParams("department");
-
-            String last_name = req.queryParams("last_name");
-            String first_name = req.queryParams("first_name");
-            Staff newStaff = new Staff(department, first_name, name, last_name);
-            StaffDao.add(newStaff);
-            res.redirect("/");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-        //get: show an individual engineer
-        get("//:id", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            int idOfStaffToFind = Integer.parseInt(req.params("id")); //pull id - must match route segment
-            Staff foundStaff = StaffDao.findById(idOfStaffToFind); //use it to find task
-            model.put("staff", foundStaff); //add it to model for template to display
-            return new ModelAndView(model, "staff-detail.hbs"); //individual task page.
-        }, new HandlebarsTemplateEngine());
-
-
-        //get: show a form to update an Engineer
-        get("//:id/edit", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            model.put("editStaff", true);
-            int idOfStaffToEdit = Integer.parseInt(req.params("id"));
-            Staff editStaff = staffDao.findById(idOfStaffToEdit);
-            model.put("editStaff", editStaff);
-            return new ModelAndView(model, "staff-form.hbs");
-        }, new HandlebarsTemplateEngine());
-
-
-        //engineer: process a form to update an engineer
-        post("//:id", (req, res) -> { //URL to update task on POST route
-            Map<String, Object> model = new HashMap<>();
-            int idOfStaffToEdit = Integer.parseInt(req.params("id"));
-            String newStaff = req.queryParams("name");
-            String department= req.queryParams("department");
-            StaffDao.update(idOfStaffToEdit, newStaff, department);
-            res.redirect("index.hbs");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-
-
-        // site Details
-
-
-        //get: delete all departments
-        get("/departments/delete", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            DepartmentsDao.clearAllDepartments(); //change
-            res.redirect("site.hbs");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-
-        //get: delete a site
-        get("/departments/:id/delete", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            int idOfDepartmentToDelete = Integer.parseInt(req.params("id"));
-            DepartmentsDao.deleteById(idOfDepartmentToDelete); //change
-            res.redirect("site.hbs");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-
-        //get: show all sites
-        get("/departments", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            List<Department> sites = DepartmentsDao.getAll();
-            model.put("departments", departments);
-            return new ModelAndView(model, "Departments.hbs");
-        }, new HandlebarsTemplateEngine());
-
-        //get: show new Site form
+        //get: show a form to create a new department
         get("/departments/new", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            List<Staff>  = StaffDao.getAll();
-            model.put("", );
-            return new ModelAndView(model, "departments-form.hbs");
+            List<Departments> departments = DepartmentsDao.getAll(); //refresh list of links for navbar
+            model.put("departments", departments);
+            return new ModelAndView(model, "department-form.hbs"); //new layout
         }, new HandlebarsTemplateEngine());
 
-
-        //site: process new site form
-        post("/departments", (req, res) -> { //URL to make new task on POST route
+        //post: process a form to create a new category
+        post("/departments", (req, res) -> { //new
             Map<String, Object> model = new HashMap<>();
-            List<Staff> all = StaffDao.getAll();
-            model.put("", all);
-            String department_name = req.queryParams("department_name");
-            String hod = req.queryParams("hod");
-            int staffId = Integer.parseInt(req.queryParams("staffId"));
-            Department newDepartment = new Department(department_name, hod, staffId);
-            DepartmentDao.add(newDepartment);
+            String name = req.queryParams("name");
+            Departments newDepartment = new Departments(name);
+            DepartmentsDao.add(newDepartment);
             res.redirect("/");
             return null;
         }, new HandlebarsTemplateEngine());
 
 
-        get("//:staff_id/deparments/:department_id", (req, res) -> {
+        //get: delete all departments and all staff
+        get("/departments/delete", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            int idOfDepartmentToFind = Integer.parseInt(req.params("department_id"));
-            Site foundDepartment = DepartmentDao.findById(idOfDepartmentToFind);
-            int idOfDepartmentToFind = Integer.parseInt(req.params("staff_id"));
-            Staff foundStaff = StaffDao.findById(idOfStaffToFind);
-            model.put("department", foundDepartment);
-            model.put("staff", foundStaff);
-            model.put("", staffDao.getAll());
-            return new ModelAndView(model, "staff-detail.hbs");
+            DepartmentsDao.clearAllDepartments();
+            StaffDao.clearAllStaff();
+            res.redirect("/");
+            return null;
         }, new HandlebarsTemplateEngine());
 
+        //get: delete all staff
+        get("/staff/delete", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            StaffDao.clearAllStaff();
+            res.redirect("/");
+            return null;
+        }, new HandlebarsTemplateEngine());
 
-        //get: show an individual site
+        //get a specific Department(and the staff it contains)
         get("/departments/:id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            int idOfSiteToFind = Integer.parseInt(req.params("id")); //pull id - must match route segment
-            Department foundDepartment = DepartmentDao.findById(idOfDepartmentToFind); //use it to find task
-            model.put("departments", foundDepartment); //add it to model for template to display
-            return new ModelAndView(model, "department-detail.hbs"); //individual task page.
+            int idOfDepartmentsToFind = Integer.parseInt(req.params("id")); //new
+            Departments foundDepartments = DepartmentsDao.findById(idOfDepartmentsToFind);
+            model.put("departments", foundDepartments);
+            List<Staff> allStaffByDepartments = DepartmentsDao.getAllStaffByDepartments(idOfDepartmentsToFind);
+            model.put("staff", allStaffByDepartments);
+            model.put("departments", DepartmentsDao.getAll()); //refresh list of links for navbar
+            return new ModelAndView(model, "department-details.hbs"); //new
         }, new HandlebarsTemplateEngine());
 
-
-        get("/departments/:id", (req, res) -> {
+        //get: show a form to update a department
+        get("/departments/:id/edit", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            int idOfDepartmentToFind = Integer.parseInt(req.params("id")); //pull id - must match route segment
-            Site foundDepartment = DepartmentsDao.findById(idOfDepartmentToFind); //use it to find task
-            model.put("department", foundDepartment); //add it to model for template to display
-            return new ModelAndView(model, "staff-detail"); //individual task page.
-        }, new HandlebarsTemplateEngine());
-
-
-
-
-        //get: show a form to update an Engineer
-        get("/departments/:id/update", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            int idOfDeparmentToEdit = Integer.parseInt(req.params("id"));
-            Department editDepartment = DepartmentsDao.findById(idOfDepartmentToEdit);
-            model.put("editDepartment", editDepartment);
+            model.put("editDepartment", true);
+            Departments departments = DepartmentsDao.findById(Integer.parseInt(req.params("id")));
+            model.put("departments", departments);
+            model.put("departments", DepartmentsDao.getAll()); //refresh list of links for navbar
             return new ModelAndView(model, "department-form.hbs");
         }, new HandlebarsTemplateEngine());
 
-
-        //site: process a form to update a site
-        post("/departments/:id", (req, res) -> { //URL to update task on POST route
+        //post: process a form to update a department
+        post("/departments/:id", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            String newDepartment = req.queryParams("department_name");
-            String hod= req.queryParams("hod");
             int idOfDepartmentToEdit = Integer.parseInt(req.params("id"));
-            DepartmentDao.update(idOfDepartmentToEdit, newDepartment, hod);
-            res.redirect("/department");
-            return null;
-        }, new HandlebarsTemplateEngine());
-
-        //get: delete all  and all sites
-        get("//delete", (req, res) -> {
-            Map<String, Object> model = new HashMap<>();
-            StaffDao.clearAll();
-            DepartmentsDao.clearAllDepartments();
+            String newName = req.queryParams("newDepartmentName");
+            DepartmentsDao.update(idOfDepartmentToEdit, newName);
             res.redirect("/");
             return null;
         }, new HandlebarsTemplateEngine());
 
-        //get: show a Department and staff
-        get("//:id", (req, res) -> {
+        //get: delete an individual staff
+        get("/departments/:department_id/staff/:staff_id/delete", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            int idOfDepartmentToFind = Integer.parseInt(req.params("id")); //new
-            Department foundDepartment = DepartmentDao.findById(idOfDepartmentToFind);
-            model.put("department", foundDepartment);
-            List<Staff> allDepartmentsByStaff = DepartmentsDao.getAllStaffByDepartments(idOfDepartmentToFind);
-            model.put("staff", allStaffByDepartment);
-            model.put("", DepartmentsDao.getAll());
-            return new ModelAndView(model, "department-detail.hbs");
+            int idOfStaffToDelete = Integer.parseInt(req.params("staff_id"));
+            StaffDao.deleteById(idOfStaffToDelete);
+            res.redirect("/");
+            return null;
         }, new HandlebarsTemplateEngine());
 
-
-        //get: show all sites under all  and show all
-        get("/index", (req, res) -> {
+        //get: show new staff form
+        get("/staff/new", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
-            List<Staff> all = StaffDao.getAll();
-            model.put("", all);
-            List<Department> departments = DepartmentsDao.getAll();
-            model.put("sites", sites);
-            return new ModelAndView(model, "index.hbs");
+            List<Departments> departments = DepartmentsDao.getAll();
+            model.put("departments", departments);
+            return new ModelAndView(model, "staff-form.hbs");
         }, new HandlebarsTemplateEngine());
 
+        //task: process new staff form
+        post("/staff", (req, res) -> { //URL to make new task on POST route
+            Map<String, Object> model = new HashMap<>();
+            List<Departments> allDepartments = DepartmentsDao.getAll();
+            model.put("departments", allDepartments);
+            String first_name = req.queryParams("first_name");
+            String last_name = req.queryParams("last_name");
+            String department = req.queryParams("department");
+            Staff newStaff = new Staff(first_name, last_name, department);        //See what we did with the hard coded categoryId?
+            StaffDao.add(newStaff);
+//            List<Task> tasksSoFar = taskDao.getAll();
+//            for (Task taskItem: tasksSoFar
+//                 ) {
+//                System.out.println(taskItem);
+//            }
+//            System.out.println(tasksSoFar);
+            res.redirect("/");
+            return null;
+        }, new HandlebarsTemplateEngine());
 
+        //get: show an individual task that is nested in a category
+        get("/departments/:department/staff/:staff_id", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            int idOfStaffToFind = Integer.parseInt(req.params("staff_id")); //pull id - must match route segment
+            Staff foundStaff = StaffDao.findById(idOfStaffToFind); //use it to find task
+            int idOfDepartmentToFind = Integer.parseInt(req.params("department"));
+            Departments foundDepartment = DepartmentsDao.findById(idOfDepartmentToFind);
+            model.put("departments", foundDepartment);
+            model.put("staff", foundStaff); //add it to model for template to display
+            model.put("departments", DepartmentsDao.getAll()); //refresh list of links for navbar
+            return new ModelAndView(model, "staff-details.hbs"); //individual staff page.
+        }, new HandlebarsTemplateEngine());
 
+        //get: show a form to update a staff
+        get("/staff/:id/edit", (req, res) -> {
+            Map<String, Object> model = new HashMap<>();
+            List<Departments> allDepartments = DepartmentsDao.getAll();
+            model.put("categories", allDepartments);
+            Staff staff = StaffDao.findById(Integer.parseInt(req.params("id")));
+            model.put("staff", staff);
+            model.put("editStaff", true);
+            return new ModelAndView(model, "staff-form.hbs");
+        }, new HandlebarsTemplateEngine());
 
+        //task: process a form to update a staff
+        post("/staff/:id", (req, res) -> { //URL to update task on POST route
+            Map<String, Object> model = new HashMap<>();
+            int staffToEditId = Integer.parseInt(req.params("id"));
+            String newContent = req.queryParams("last_name");
+            int newDepartmentId = Integer.parseInt(req.queryParams("departmentId"));
+            StaffDao.update(staffToEditId, newContent, newDepartmentId);  // remember the hardcoded categoryId we placed? See what we've done to/with it?
+            res.redirect("/");
+            return null;
+        }, new HandlebarsTemplateEngine());
+
+        get("api/list-staff", "application/json", (req, res) -> {
+            res.type("application/json");
+            return gson.toJson(StaffDao.getAll());
+        });
+
+        }
     }
-}

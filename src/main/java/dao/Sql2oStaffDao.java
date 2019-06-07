@@ -70,7 +70,7 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
     }
 
     @Override
-    public void clearAllTasks() {
+    public void clearAllStaff() {
         String sql = "DELETE from staff";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)

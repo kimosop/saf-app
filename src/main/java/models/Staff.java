@@ -8,72 +8,62 @@ import java.util.ArrayList;
 
 
 public class Staff {
-    private String department;
-    private String first_name;
-    private String last_name;
-    private int id;
-    private ArrayList<Departments> departments;
-
-
-    public Staff(String staff, String first_name, String name, String last_name) {
-        this.department = name;
-        this.first_name = first_name;
-        this.last_name = last_name;
-    }
-
-
-    public void setName(String name) {
-        this.department = name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
-    }
-
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
+    public String getDepartment() {
         return department;
     }
 
-
-    public int getId() {
-        return id;
+    public void setDepartment(String department) {
+        this.department = department;
     }
 
     public String getFirst_name() {
         return first_name;
     }
 
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
     public String getLast_name() {
         return last_name;
     }
 
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
 
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Staff(String department, String first_name, String last_name) {
+        this.department = department;
+        this.first_name = first_name;
+        this.last_name = last_name;
+    }
+
+    private String department;
+    private String first_name;
+    private String last_name;
+    private int id;
 
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Staff)) return false;
         Staff staff = (Staff) o;
-        return getId() == staff.getId() &&
-                Objects.equals(getDepartment(), staff.getDepartment()) &&
-                Objects.equals(getFirst_name(), staff.getFirst_name()) &&
-                Objects.equals(getLast_name(), staff.getLast_name()) &&
-                Objects.equals(departments, staff.departments);
+        return last_name == staff.last_name &&
+                id == staff.id &&
+                Objects.equals(last_name, staff.last_name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getName(), getId(), getFirst_name(), getLast_name(),getDepartment(), departments);
+        return Objects.hash(first_name,last_name, department, id);
     }
 }
