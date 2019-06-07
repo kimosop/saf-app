@@ -7,6 +7,7 @@ public interface DepartmentsDao {
     //create
     void add(Departments departments);
     void addDepartmentsToNews(Departments departments, News news);
+    void addDepartmentsToStaff(Departments departments, Staff staff);
 
     //read
     List<Departments> getAll();
