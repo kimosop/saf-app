@@ -32,10 +32,12 @@ public class App{
 
 
         staticFileLocation("/public");
-      // Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/saf-app",username:, null);
-        //Sql2o sql2o = DB.sql2o;
-        Sql2oStaffDao StaffDao = new Sql2oStaffDao(DB.sql2o);
-        Sql2oDepartmentsDao DepartmentsDao = new Sql2oDepartmentsDao(DB.sql2o);
+        String connectionString = "jdbc:h2:~/jadle.db;INIT=RUNSCRIPT from 'classpath:db/create.sql'";
+        Sql2o sql2o = new Sql2o(connectionString, "", "");
+       //Sql2o sql2o = new Sql2o("jdbc:postgresql://localhost:5432/saf-app",username:, null);
+       //Sql2o sql2o = sql2o;
+        Sql2oStaffDao StaffDao = new Sql2oStaffDao(sql2o);
+        Sql2oDepartmentsDao DepartmentsDao = new Sql2oDepartmentsDao(sql2o);
         Gson gson = new Gson();
         //get: show all tasks in all categories and show all categories
         get("/", (req, res) -> {

@@ -10,8 +10,7 @@ CREATE TABLE IF NOT EXISTS Departments (
 CREATE TABLE IF NOT EXISTS Staff (
  id int PRIMARY KEY auto_increment,
  name VARCHAR
- email VARCHAR
- mobile VARCHAR
+ department VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS News (
