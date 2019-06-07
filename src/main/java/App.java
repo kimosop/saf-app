@@ -44,8 +44,8 @@ public class App{
             Map<String, Object> model = new HashMap<>();
             List<Departments> allDepartments = DepartmentsDao.getAll();
             model.put("departments", allDepartments);
-            List<Staff> tasks = StaffDao.getAll();
-            model.put("tasks", tasks);
+            List<Staff> staff = StaffDao.getAll();
+            model.put("staff", staff);
             return new ModelAndView(model, "index.hbs");
         }, new HandlebarsTemplateEngine());
 

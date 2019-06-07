@@ -1,15 +1,14 @@
 SET MODE PostgreSQL;
 
-CREATE TABLE IF NOT EXISTS Departments (
+CREATE TABLE IF NOT EXISTS departments (
  id int PRIMARY KEY auto_increment,
- name VARCHAR,
- hod VARCHAR,
- email VARCHAR
+ department_name VARCHAR,
+ hod VARCHAR
 );
 
-CREATE TABLE IF NOT EXISTS Staff (
+CREATE TABLE IF NOT EXISTS staff (
  id int PRIMARY KEY auto_increment,
- name VARCHAR
+ name VARCHAR,
  department VARCHAR
 );
 
