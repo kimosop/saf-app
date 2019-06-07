@@ -39,7 +39,7 @@ public class App{
         Sql2oStaffDao StaffDao = new Sql2oStaffDao(sql2o);
         Sql2oDepartmentsDao DepartmentsDao = new Sql2oDepartmentsDao(sql2o);
         Gson gson = new Gson();
-        //get: show all tasks in all categories and show all categories
+        //get: show all staff in all departments and show all departments
         get("/", (req, res) -> {
             Map<String, Object> model = new HashMap<>();
             List<Departments> allDepartments = DepartmentsDao.getAll();
