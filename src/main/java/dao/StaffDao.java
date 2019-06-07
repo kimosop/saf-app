@@ -1,21 +1,23 @@
 package dao;
 
+import models.Staff;
 import java.util.List;
 
 public interface StaffDao {
-    //create
-    void add(Staff staff);
-    void addStaffToNews(Staff staff, Departments departmentss);
 
-
-    //read
+    // LIST
     List<Staff> getAll();
 
+    // CREATE
+    void add(Staff staff);
 
-    //update
-    //omit for now
+    // READ
+    Staff findById(int id);
 
-    //delete
+    //UPDATE
+    void update(int id, String content, int departmentId);
+
+    //DELETE
     void deleteById(int id);
-    void clearAll();
+    void clearAllTasks();
 }
