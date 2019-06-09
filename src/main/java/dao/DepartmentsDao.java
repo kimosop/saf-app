@@ -25,5 +25,7 @@ public interface DepartmentsDao {
     //DELETE
     void deleteById(int id);
     void clearAllDepartments();
+
+    List<News> getAllNewsByDepartments(int departmentId);
 }
 

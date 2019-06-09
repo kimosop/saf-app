@@ -50,6 +50,11 @@ public class Sql2oDepartmentsDao implements DepartmentsDao {
     }
 
     @Override
+    public List<News> getAllNewsByDepartment(int departmentId) {
+        return null;
+    }
+
+    @Override
     public void update(int id, String newName){
         String sql = "UPDATE departments SET deptname = :deptname WHERE id=:id";
         try(Connection con = DB.sql2o.open()){
