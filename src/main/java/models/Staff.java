@@ -1,34 +1,21 @@
 package models;
 
-import org.sql2o.*;
-import java.util.List;
 import java.util.Objects;
-import java.util.ArrayList;
-
 
 public class Staff {
-    public String getDepartment() {
-        return department;
-    }
 
-    public void setDepartment(String department) {
-        this.department = department;
-    }
+    private String firstname;
+    private String lastname;
+    private String ekno;
+    private String jobdescription;
+    private int deptid;
+    private int id;
 
-    public String getFirst_name() {
-        return first_name;
-    }
-
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
-    }
-
-    public String getLast_name() {
-        return last_name;
-    }
-
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public Staff(String firstname, String lastname, String ekno, String jobdescription) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.ekno = ekno;
+        this.jobdescription = jobdescription;
     }
 
     public int getId() {
@@ -39,30 +26,59 @@ public class Staff {
         this.id = id;
     }
 
-    public Staff(String department, String first_name, String last_name) {
-        this.department = department;
-        this.first_name = first_name;
-        this.last_name = last_name;
+    public String getFirstname() {
+        return firstname;
     }
 
-    private String department;
-    private String first_name;
-    private String last_name;
-    private int id;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getEkno() {
+        return ekno;
+    }
+
+    public void setEkno(String ekno) {
+        this.ekno = ekno;
+    }
+
+    public String getJobdescription() {
+        return jobdescription;
+    }
+
+    public void setJobdescription(String jobdescription) {
+        this.jobdescription = jobdescription;
+    }
+
+    public int getDeptid() {
+        return deptid;
+    }
+
+    public void setDeptid(int deptid) {
+        this.deptid = deptid;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Staff)) return false;
         Staff staff = (Staff) o;
-        return last_name == staff.last_name &&
-                id == staff.id &&
-                Objects.equals(last_name, staff.last_name);
+        return getFirstname().equals(staff.getFirstname()) &&
+                getLastname().equals(staff.getLastname()) &&
+                getEkno().equals(staff.getEkno()) &&
+                getJobdescription().equals(staff.getJobdescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(first_name,last_name, department, id);
+        return Objects.hash(getFirstname(), getLastname(), getEkno(), getJobdescription());
     }
 }

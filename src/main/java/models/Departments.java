@@ -3,51 +3,52 @@ package models;
 import java.util.Objects;
 
 public class Departments {
-    private String department_name;
-    private String hod;
+
     private int id;
+    private String deptname;
+    private String description;
 
-    public String getHod() {
-        return hod;
-    }
-
-    public void setHod(String hod) {
-        this.hod = hod;
-    }
-
-
-    public Departments(String department_name) {
-        this.department_name = department_name;
-    }
-
-    public String getName() {
-        return department_name;
+    public Departments(String deptname, String description) {
+        this.deptname = deptname;
+        this.description = description;
     }
 
     public int getId() {
         return id;
     }
 
-    public void setName(String department_name) {
-        this.department_name = department_name;
-    }
-
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDeptname() {
+        return deptname;
+    }
+
+    public void setDeptname(String deptname) {
+        this.deptname = deptname;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Departments)) return false;
-        Departments department = (Departments) o;
-        return id == department.id &&
-                Objects.equals(department_name, department.department_name);
+        Departments that = (Departments) o;
+        return getId() == that.getId() &&
+                getDeptname().equals(that.getDeptname()) &&
+                getDescription().equals(that.getDescription());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(department_name, id);
+        return Objects.hash(getId(), getDeptname(), getDescription());
     }
-
 }
