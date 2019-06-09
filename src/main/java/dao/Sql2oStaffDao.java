@@ -1,10 +1,13 @@
 package dao;
 
 import models.Staff;
-import org.sql2o.*;
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
+
 import java.util.List;
 
-public class Sql2oStaffDao implements StaffDao { //implementing our interface
+public class Sql2oStaffDao  implements StaffDao{
 
     private final Sql2o sql2o;
 
@@ -14,7 +17,7 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
 
     @Override
     public void add(Staff staff) {
-        String sql = "INSERT INTO staff (description, departmentId) VALUES (:description, :categoryId)"; //raw sql
+        String sql = "INSERT INTO staff (firstname, lastname,deptid, jobdescription, ekno) VALUES (:firstname, :lastname, :deptid, :jobdescription, :ekno)"; //raw sql
         try(Connection con = sql2o.open()){ //try to open a connection
             int id = (int) con.createQuery(sql, true) //make a new variable
                     .bind(staff)
@@ -34,6 +37,7 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
         }
     }
 
+
     @Override
     public Staff findById(int id) {
         try(Connection con = sql2o.open()){
@@ -44,13 +48,16 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
     }
 
     @Override
-    public void update(int id, String newDescription, int newDepartmentId){
-        String sql = "UPDATE staff SET (description, departmentId) = (:description, :departmentId) WHERE id=:id";   //raw sql
+    public void update(int id, String newFirstname, String newLastname, int newsectionId, String newEkNo, String newrole){
+        String sql = "UPDATE Staff SET (firstname, lastname, deptid, ekno, jobdescription) = (:firstname, :lastname, :deptid, :ekno, :jobdescription) WHERE id=:id"; //raw sql
         try(Connection con = sql2o.open()){
             con.createQuery(sql)
-                    .addParameter("description", newDescription)
-                    .addParameter("departmentId", newDepartmentId)
+                    .addParameter("newFirstame", newFirstname)
+                    .addParameter("newLastname", newLastname)
+                    .addParameter("sectionId", newsectionId)
                     .addParameter("id", id)
+                    .addParameter("ekNo", newEkNo)
+                    .addParameter("role", newrole)
                     .executeUpdate();
         } catch (Sql2oException ex) {
             System.out.println(ex);
@@ -59,7 +66,7 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
 
     @Override
     public void deleteById(int id) {
-        String sql = "DELETE from staff WHERE id=:id";
+        String sql = "DELETE from Staff WHERE id=:id";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .addParameter("id", id)
@@ -71,7 +78,7 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
 
     @Override
     public void clearAllStaff() {
-        String sql = "DELETE from staff";
+        String sql = "DELETE from Staff";
         try (Connection con = sql2o.open()) {
             con.createQuery(sql)
                     .executeUpdate();
@@ -79,4 +86,5 @@ public class Sql2oStaffDao implements StaffDao { //implementing our interface
             System.out.println(ex);
         }
     }
+
 }

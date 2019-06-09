@@ -1,19 +1,23 @@
 package dao;
 
 import models.Departments;
+import models.News;
 import models.Staff;
+//import models.Staff;
 import java.util.List;
 
 public interface DepartmentsDao {
+
     //LIST
     List<Departments> getAll();
 
     //CREATE
-    void add (Departments departments);
 
-    //READ
+    void add (Departments departments); //****
+
+    //READs
     Departments findById(int id);
-    List<Staff> getAllStaffByDepartments(int departmentId);
+    List<News> getAllNewsByDepartment(int departmentId);
 
     //UPDATE
     void update(int id, String name);
@@ -21,6 +25,5 @@ public interface DepartmentsDao {
     //DELETE
     void deleteById(int id);
     void clearAllDepartments();
-
 }
 
