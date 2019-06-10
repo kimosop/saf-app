@@ -16,10 +16,10 @@ This web app REST API for querying and retrieving scoped news, staff and departm
  ## API Technical Documentation / Specifications
 | Path                                     |  Operation | Description   |
  | ---------------------------------------------- | ------ | --------- |
- | https://sfcinfoapp.herokuapp.com/api/list-departments| GET  | List all departments|
- |https://sfcinfoapp.herokuapp.com/api/list-staff| GET| List all staff|
- | https://sfcinfoapp.herokuapp.com/api/api/add-department |POST| Add department|
-  | https://sfcinfoapp.herokuapp.com/api/api/add-news |POST| Add News|
+ | https://saf-app.herokuapp.com/api/list-departments| GET  | List all departments|
+ |https://saf-app.herokuapp.com/api/list-staff| GET| List all staff|
+ | https://saf-app.herokuapp.com/api/api/add-department |POST| Add department|
+  | https://saf-app.herokuapp.com/api/api/add-news |POST| Add News|
 
 
 ## Setup/Installation Requirements
@@ -56,7 +56,7 @@ $< https://saf-app.herokuapp.com/ >
 
 # clone into repository
 
-$ git clone  https://github.com/modongo/saftechteam.git
+$ git clone  https://github.com/kimosop/saf-app.git
 ### Open using your favorite editor and view the code or just open the index.html on the browser
 
 
